@@ -40,51 +40,66 @@ struct AddView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        Form {
-            Section(header: Text("Credentials")) {
-                TextField("Username", text: $name)
-                SecureField("Password", text: $password)
+        VStack{
+            HStack{
+            Button {
+                dismiss()
+            } label: {
+                Text("Annuller").padding(.all)
             }
-            Section(header: Text("User Info")) {
-                Picker("Gender", selection: $gender) {
-                    ForEach(Gender.allCases) { gender in
-                        Text(gender.rawValue.capitalized).tag(gender)
-                    }
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                DatePicker("Date of birth",
-                           selection: $birthDate,
-                           displayedComponents: [.date])
-                Picker("Language", selection: $language) {
-                    ForEach(Language.allCases) { language in
-                        Text(language.rawValue.capitalized)
-                            .tag(language)
-                    }
-                }
-            }
-            Section {
-                Toggle(isOn: $isAgreed) {
-                    Text("Agree to our")
-                    Link("terms of Service",
-                         destination: URL(string:"https://example.com/TOS.html")!)
-                }
-                Button {
-                    isShowingAlert = true
+            Spacer()
+        }
+            Form {
+                DisclosureGroup {
+                        TextField("Username", text: $name)
+                        SecureField("Password", text: $password)
                 } label: {
-                    HStack {
-                        Spacer()
-                        Text("Save")
-                        Spacer()
+                    Label("Credentials", systemImage: "person")
+                }
+
+               
+                Section(header: Text("User Info")) {
+                    Picker("Gender", selection: $gender) {
+                        ForEach(Gender.allCases) { gender in
+                            Text(gender.rawValue.capitalized).tag(gender)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    DatePicker("Date of birth",
+                               selection: $birthDate,
+                               displayedComponents: [.date])
+                    Picker("Language", selection: $language) {
+                        ForEach(Language.allCases) { language in
+                            Text(language.rawValue.capitalized)
+                                .tag(language)
+                        }
                     }
                 }
-                .foregroundColor(.white)
-                .padding()
-                .background(Color.accentColor)
-                .cornerRadius(8)
-                .alert(isPresented: $isShowingAlert) {
-                    Alert(title: Text("Form Submitted"),
-                          message: Text("Thanks \(name)\nWe will be in contact soon!"),
-                          dismissButton: .default(Text("OK")){dismiss()})
+                Section {
+                    Toggle(isOn: $isAgreed) {
+                        Text("Agree to our")
+                        Link("terms of Service",
+                             destination: URL(string:"https://example.com/TOS.html")!)
+                    }
+                    
+                    Button {
+                        isShowingAlert = true
+                    } label: {
+                        HStack {
+                            Spacer()
+                            Text("Save")
+                            Spacer()
+                        }
+                    }
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.accentColor)
+                    .cornerRadius(8)
+                    .alert(isPresented: $isShowingAlert) {
+                        Alert(title: Text("Form Submitted"),
+                              message: Text("Thanks \(name)\nWe will be in contact soon!"),
+                              dismissButton: .default(Text("OK")){dismiss()})
+                    }
                 }
             }
         }
